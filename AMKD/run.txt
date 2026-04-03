@@ -1,0 +1,139 @@
+预训练教师模型
+
+多标签分类
+
+mmimdb:
+python zoo_pretrain_teacher.py \
+  --dataset mmimdb \
+  --teacher_model clip-RN101 \
+  --batch_size 128 \
+  --learning_rate 5e-5
+
+python zoo_pretrain_teacher.py \
+  --dataset mmimdb \
+  --teacher_model clip-ViT-B-16 \
+  --batch_size 128 \
+  --learning_rate 5e-5
+
+python zoo_pretrain_teacher.py \
+  --dataset mmimdb \
+  --teacher_model clip-ViT-L-14 \
+  --batch_size 128 \
+  --learning_rate 5e-5
+  
+
+
+
+检索任务
+
+flickr-30k：
+python zoo_pretrain_teacher.py \
+  --dataset flickr-30k \
+  --teacher_model clip-RN101 \
+  --batch_size 256 \
+  --accumulate_steps 6 \
+  --learning_rate 5e-5 \
+  --epoch 16 \
+  --patience 7 \
+  --use_ema \
+  --ema_decay 0.9997
+  
+python zoo_pretrain_teacher.py \
+  --dataset flickr-30k \
+  --teacher_model clip-ViT-B-16 \
+  --batch_size 256 \
+  --learning_rate 5e-5 --project_dim 64 --gpu 0
+  
+python zoo_pretrain_teacher.py \
+  --dataset flickr-30k \
+  --teacher_model clip-ViT-L-14 \
+  --batch_size 256 \
+  --learning_rate 5e-5 --project_dim 64 --gpu 5
+  
+ms-coco:
+python zoo_pretrain_teacher.py \
+  --dataset ms-coco \
+  --teacher_model clip-RN101 \
+  --batch_size 256 \
+  --learning_rate 5e-5
+
+python zoo_pretrain_teacher.py \
+  --dataset ms-coco \
+  --teacher_model clip-ViT-B-16 \
+  --batch_size 256 \
+  --learning_rate 5e-5
+  
+python zoo_pretrain_teacher.py \
+  --dataset ms-coco \
+  --teacher_model clip-ViT-L-14 \
+  --batch_size 256 \
+  --learning_rate 5e-5
+
+检索评估：
+python eval_teacher.py \
+  --dataset flickr-30k \
+  --teacher_model clip-RN101 \
+  --ckpt raw_models/teachers/train/clip-RN101_flickr-30k_best.pth
+
+python eval_teacher.py \
+  --dataset ms-coco \
+  --teacher_model clip-RN101 \
+  --ckpt raw_models/teachers/train/clip-RN101_ms-coco_best.pth
+
+
+学生baseline
+mmimdb：
+python main.py --dataset mmimdb --student_model clip-RN50 --distiller none --epoch 30 --learning_rate 5e-5
+
+python main.py --dataset mmimdb --student_model clip-ViT-B-32 --distiller none --epoch 30 --learning_rate 5e-5
+
+python main.py --dataset mmimdb --student_model vit-bert --distiller none --epoch 30 --learning_rate 5e-5 
+
+python main.py --dataset mmimdb --student_model resnet-bert --distiller none --epoch 30 --learning_rate 5e-5
+
+
+MS-COCO：
+python main.py --dataset ms-coco --student_model clip-ViT-B-32 --distiller none --epoch 30 --learning_rate 1e-5 --batch_size 256
+
+python main.py --dataset ms-coco --student_model clip-RN50 --distiller none --epoch 30 --learning_rate 1e-5 --batch_size 256
+
+python main.py --dataset ms-coco --student_model resnet-bert --distiller none --epoch 20 --learning_rate 1e-5 --batch_size 256
+
+python main.py --dataset ms-coco --student_model vit-bert --distiller none --epoch 30 --learning_rate 1e-5 --batch_size 256
+
+flickr-30k：
+python main.py --dataset flickr-30k --student_model clip-ViT-B-32 --distiller none --epoch 30 --learning_rate 5e-5 
+
+python main.py --dataset flickr-30k --student_model clip-RN50 --distiller none --epoch 30 --learning_rate 5e-5 
+
+python main.py --dataset flickr-30k --student_model vit-bert --distiller none --epoch 30 --learning_rate 5e-5 
+ 
+python main.py --dataset flickr-30k --student_model resnet-bert --distiller none --epoch 30 --learning_rate 5e-5
+
+
+蒸馏：
+mmimdb：
+python main.py --dataset mmimdb --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model clip-ViT-B-32 --distiller hrad --epoch 20 --learning_rate 5e-5 --gpu 0
+python main.py --dataset mmimdb --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model clip-RN50 --distiller hrad --epoch 20 --learning_rate 5e-5 --gpu 1
+python main.py --dataset mmimdb --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model vit-bert --distiller hrad --epoch 20 --learning_rate 5e-5 --gpu 2
+python main.py --dataset mmimdb --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model  resnet-bert --distiller hrad  --epoch 20 --learning_rate 5e-5 --gpu 3
+python main.py --dataset mmimdb --teacher_model_1 clip-ViT-B-16 --teacher_model_2   clip-RN101  --student_model  clip-RN50 --distiller hrad --epoch 20 --learning_rate 5e-5 --gpu 4
+python main.py --dataset mmimdb --teacher_model_1 clip-ViT-B-16 --teacher_model_2   clip-RN101  --student_model  resnet-bert --distiller hrad --epoch 20 --learning_rate 5e-5 --gpu 5
+
+ms-coco：
+python main.py --dataset ms-coco --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model clip-ViT-B-32 --distiller hrad --epoch 40 --learning_rate 1e-5 --batch_size 128 --gpu 2 
+python main.py --dataset ms-coco --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model resnet-bert --distiller hrad --epoch 40 --learning_rate 1e-5 --batch_size 128 --gpu 1
+python main.py --dataset ms-coco --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-RN101  --student_model resnet-bert --distiller hrad --epoch 40 --learning_rate 1e-5 --batch_size 256 --gpu 4
+python main.py --dataset ms-coco --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model clip-RN50 --distiller hrad --epoch 40 --learning_rate 1e-5 --batch_size 128 --gpu 3
+python main.py --dataset ms-coco --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model vit-bert --distiller hrad --epoch 40 --learning_rate 1e-5 --batch_size 128 --gpu 0
+python main.py --dataset ms-coco --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-RN101  --student_model clip-RN50 --distiller hrad --epoch 40 --learning_rate 1e-5 --batch_size 128 --gpu 5
+
+flickr-30k：
+python main.py --dataset flickr-30k --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model clip-ViT-B-32 --distiller hrad --epoch 40 --learning_rate 5e-5 --gpu 0 --project_dim 64
+python main.py --dataset flickr-30k --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model clip-RN50 --distiller hrad --epoch 40 --learning_rate 5e-5 --gpu 1
+python main.py --dataset flickr-30k --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model vit-bert --distiller hrad --epoch 40 --learning_rate 5e-5 --gpu 2
+python main.py --dataset flickr-30k --teacher_model_1 clip-ViT-B-16 --teacher_model_2  clip-ViT-L-14  --student_model  resnet-bert --distiller hrad  --epoch 40 --learning_rate 5e-5 --gpu 3
+python main.py --dataset flickr-30k --teacher_model_1 clip-ViT-B-16 --teacher_model_2   clip-RN101  --student_model  clip-RN50 --distiller hrad --epoch 40 --learning_rate 5e-5 --gpu 4
+python main.py --dataset flickr-30k --teacher_model_1 clip-ViT-B-16 --teacher_model_2   clip-RN101  --student_model  resnet-bert --distiller hrad --epoch 40 --learning_rate 5e-5 --gpu 5
+
+
