@@ -1,4 +1,4 @@
-# Adaptive Multimodal Knowledge Distillation via Synergistic Multiknowledge Supervision
+# Adaptive Multimodal Distillation via Coordinating Heterogeneous Supervision
 
 
 ## 🏗️ Project Structure
@@ -6,7 +6,7 @@
 ```
 
 ├── datasets/                 # Dataset loaders
-├── distillers/               # Distillation methods (MSD, DSMD, AMKD, etc.)
+├── distillers/               # Distillation methods (MSD, DSMD, AMD, etc.)
 ├── models/                   # Student models
 ├── raw-models/               # Saved checkpoints
 ├── evaluation.py             # Evaluation (classification & retrieval)
@@ -127,9 +127,9 @@ python main.py \
 
 ---
 
-## 🔥 Distillation (AMKD)
+## 🔥 Distillation (AMD)
 
-Our proposed method: **AMKD (Adaptive Multimodal Knowledge Distillation)**
+Our proposed method: **AMD (Adaptive Knowledge Distillation)**
 
 ### Example (MMIMDb)
 
@@ -139,7 +139,7 @@ python main.py \
   --teacher_model_1 clip-ViT-B-16 \
   --teacher_model_2 clip-ViT-L-14 \
   --student_model clip-ViT-B-32 \
-  --distiller amkd \
+  --distiller amd \
   --epoch 20 \
   --learning_rate 5e-5
 ```
@@ -154,7 +154,7 @@ python main.py \
   --teacher_model_1 clip-ViT-B-16 \
   --teacher_model_2 clip-ViT-L-14 \
   --student_model clip-RN50 \
-  --distiller amkd \
+  --distiller amd \
   --epoch 40 \
   --learning_rate 1e-5 \
   --batch_size 128
@@ -170,7 +170,7 @@ python main.py \
   --teacher_model_1 clip-ViT-B-16 \
   --teacher_model_2 clip-ViT-L-14 \
   --student_model clip-ViT-B-32 \
-  --distiller amkd \
+  --distiller amd \
   --epoch 40 \
   --learning_rate 5e-5 \
   --project_dim 64
@@ -186,7 +186,7 @@ python main.py \
 * `kdmcse`
 * `g2d`
 * `dclip`
-* `amkd` (ours)
+* `amd` (ours)
 
 ---
 
